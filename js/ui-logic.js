@@ -51,7 +51,7 @@ for (fillWithValue of fillWithValues) {
 
     for (value of possibleValuesForProperty[selectedProperty]) {
       const comboBoxItem = document.createElement("bx-combo-box-item");
-      comboBoxItem.innerText = sv(value) || "Empty";
+      comboBoxItem.innerText = sv(value) || loc.empty;
       comboBoxItem.value = sv(value) || "";
 
       targetMenu.appendChild(comboBoxItem);
