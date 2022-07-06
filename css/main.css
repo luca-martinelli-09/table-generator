@@ -1,0 +1,129 @@
+body {
+  margin: 20px;
+}
+
+.flex-col-gap {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#options,
+#data {
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.flex-rows {
+  display: flex;
+  gap: 30px;
+}
+
+.flex-rows * {
+  flex: 1;
+}
+
+.flex-rows.small-gap {
+  gap: 15px;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-end {
+  align-items: end;
+}
+
+bx-tag {
+  font-size: 15px;
+  padding: 5px 17px;
+  cursor: pointer;
+}
+
+#dataTables bx-table-cell,
+#dataTables bx-table-header-cell {
+  white-space: nowrap;
+}
+
+bx-dropdown:not(:defined),
+bx-dropdown-item:not(:defined),
+bx-accordion:not(:defined),
+bx-accordion-item:not(:defined),
+bx-modal:not(:defined),
+bx-btn:not(:defined),
+bx-table:not(:defined) {
+  visibility: hidden;
+}
+
+.page-break {
+  page-break-after: always;
+  margin: 30px;
+}
+
+.stats-title {
+  margin: 10px 0px;
+  font-weight: bold;
+}
+
+.table-title {
+  margin-bottom: 15px;
+}
+
+@media print {
+  * {
+    margin: 0;
+    padding: 0;
+    color: black;
+  }
+
+  .print-none {
+    display: none !important;
+  }
+
+  .page-break {
+    page-break-after: always;
+    margin: 0;
+  }
+
+  bx-table-header-row,
+  bx-table-row {
+    height: auto;
+    display: table-row;
+    page-break-inside: avoid;
+  }
+
+  bx-table-cell,
+  bx-table-header-cell {
+    padding: 3px 7px;
+    border: 1px solid #aaa;
+    display: table-cell;
+    background: transparent;
+  }
+
+  bx-table {
+    display: table;
+  }
+
+  bx-table-head {
+    display: table-header-group;
+  }
+
+  bx-table-body {
+    display: table-row-group;
+  }
+
+  .stats-title {
+    font-size: 18px;
+  }
+
+  .table-footer {
+    display: table-footer-group;
+  }
+
+  .table-footer bx-table-header-cell,
+  .stats-title-row bx-table-header-cell {
+    border: none;
+    padding: 10px 0px;
+  }
+}

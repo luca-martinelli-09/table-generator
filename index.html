@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Table Generator</title>
+
+  <meta name="author" content="Luca Martinelli">
+
+  <script>const DATA_SOURCE_URL = null;</script>
+
+  <link rel="stylesheet" href="https://1.www.s81c.com/common/carbon-for-ibm-dotcom/tag/v1/latest/plex.css" />
+  <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+  <!-- OPTIONS -->
+  <div id="options" class="flex-col-gap print-none">
+    <h1 data-local="options">Options</h1>
+    <bx-accordion>
+      <bx-accordion-item title-text="Headers" data-local="property" data-localattr="title-text">
+        <div class="flex-col-gap">
+          <p data-local="headersInfo">
+            Drag and drop properties you want to show in the table generated.
+          </p>
+          <br>
+          <div class="flex-rows">
+            <strong data-local="availableProperties">Availables properties</strong>
+            <strong data-local="selectedProperties">Selected properties</strong>
+          </div>
+          <div class="flex-rows" id="optionsHeaders">
+            <bx-tile id="availablePropertiesHeaders" class="connectedSortable emptyWhenLoaded fillWithProperties">
+              <bx-skeleton-text></bx-skeleton-text>
+            </bx-tile>
+            <bx-tile id="selectedPropertiesHeaders" class="connectedSortable emptyWhenLoaded">
+              <bx-skeleton-text></bx-skeleton-text>
+            </bx-tile>
+          </div>
+        </div>
+      </bx-accordion-item>
+      <bx-accordion-item title-text="Sorting" data-local="sorting" data-localattr="title-text">
+        <div class="flex-col-gap">
+          <p data-local="sortingInfo">
+            Drag and drop properties you want to use to sort data. You can change sort type by clicking on the selected
+            property.
+          </p>
+          <br>
+          <div class="flex-rows">
+            <strong data-local="availableProperties">Availables properties</strong>
+            <strong data-local="selectedProperties">Selected properties</strong>
+          </div>
+          <div class="flex-rows" id="optionSorting">
+            <bx-tile id="availablePropertiesSorting" data-click="toggleSort" data-map="addSort"
+              class="optionSorting connectedSortable emptyWhenLoaded fillWithProperties">
+              <bx-skeleton-text></bx-skeleton-text>
+            </bx-tile>
+            <bx-tile id="selectedPropertiesSorting" class="optionSorting connectedSortable emptyWhenLoaded">
+              <bx-skeleton-text></bx-skeleton-text>
+            </bx-tile>
+          </div>
+        </div>
+      </bx-accordion-item>
+      <bx-accordion-item title-text="Filters" data-local="filters" data-localattr="title-text">
+        <div class="flex-col-gap">
+          <p data-local="filtersInfo">Add and remove filters. Conjunctions will be applied to same property filters.</p>
+          <bx-data-table>
+            <bx-table-toolbar-content>
+              <bx-btn data-target="modalFilter" data-action="openModal" data-local="newFilter">New filter</bx-btn>
+            </bx-table-toolbar-content>
+            <bx-table size="large">
+              <bx-table-head>
+                <bx-table-header-row>
+                  <bx-table-header-cell style="width: 0px;"></bx-table-header-cell>
+                  <bx-table-header-cell data-local="conjunction">Conjunction</bx-table-header-cell>
+                  <bx-table-header-cell data-local="property">Property</bx-table-header-cell>
+                  <bx-table-header-cell data-local="comparator">Comparator</bx-table-header-cell>
+                  <bx-table-header-cell data-local="value">Value</bx-table-header-cell>
+                </bx-table-header-row>
+              </bx-table-head>
+              <bx-table-body id="filtersList"></bx-table-body>
+            </bx-table>
+          </bx-data-table>
+        </div>
+      </bx-accordion-item>
+      <bx-accordion-item title-text="Dividers" data-local="dividers" data-localattr="title-text">
+        <div class="flex-col-gap">
+          <p data-local="dividersInfo">
+            Start new table/add a page break or add an arbitrary number of empty rows when a property change.
+          </p>
+          <bx-data-table>
+            <bx-table-toolbar-content>
+              <bx-btn data-target="modalDivider" data-action="openModal" data-local="newDivider">New divider</bx-btn>
+            </bx-table-toolbar-content>
+            <bx-table size="large">
+              <bx-table-head>
+                <bx-table-header-row>
+                  <bx-table-header-cell style="width: 0px;"></bx-table-header-cell>
+                  <bx-table-header-cell data-local="property">Property</bx-table-header-cell>
+                  <bx-table-header-cell data-local="pageBreak">Number of rows/Page break</bx-table-header-cell>
+                </bx-table-header-row>
+              </bx-table-head>
+              <bx-table-body id="dividersList"></bx-table-body>
+            </bx-table>
+          </bx-data-table>
+        </div>
+      </bx-accordion-item>
+      <bx-accordion-item title-text="Statistics" data-local="statistics" data-localattr="title-text">
+        <div class="flex-col-gap">
+          <p data-local="statisticsInfo">
+            Generate statistics like count of unique values for properties, sums, averages.
+          </p>
+          <bx-data-table>
+            <bx-table-toolbar-content>
+              <bx-btn data-target="modalStatistic" data-action="openModal" data-local="newStatistic">New statistic
+              </bx-btn>
+            </bx-table-toolbar-content>
+            <bx-table size="large">
+              <bx-table-head>
+                <bx-table-header-row>
+                  <bx-table-header-cell style="width: 0px;"></bx-table-header-cell>
+                  <bx-table-header-cell data-local="operator">Operator</bx-table-header-cell>
+                  <bx-table-header-cell data-local="property">Property</bx-table-header-cell>
+                </bx-table-header-row>
+              </bx-table-head>
+              <bx-table-body id="statisticsList"></bx-table-body>
+            </bx-table>
+          </bx-data-table>
+        </div>
+      </bx-accordion-item>
+      <bx-accordion-item title-text="Saved options" data-local="savedOptions" data-localattr="title-text">
+        <div class="flex-col-gap">
+          <p data-local="savedOptionsInfo">
+            Save current options to recover them quickly.
+          </p>
+          <bx-data-table>
+            <bx-table-toolbar-content>
+              <bx-btn data-target="modalSave" data-action="openModal" data-local="saveOptions">Save options</bx-btn>
+            </bx-table-toolbar-content>
+            <bx-table size="large">
+              <bx-table-head>
+                <bx-table-header-row>
+                  <bx-table-header-cell style="width: 0px;"></bx-table-header-cell>
+                  <bx-table-header-cell data-local="name">Name</bx-table-header-cell>
+                </bx-table-header-row>
+              </bx-table-head>
+              <bx-table-body id="savedOptionsList"></bx-table-body>
+            </bx-table>
+          </bx-data-table>
+        </div>
+      </bx-accordion-item>
+    </bx-accordion>
+    <div class="flex-rows small-gap">
+      <bx-btn id="createTableFromOptionsBtn" data-local="generateTable">Generate</bx-btn>
+      <bx-btn kind="ghost" onclick="window.print()" style="flex: 0;" data-local="print">Print</bx-btn>
+      <bx-btn kind="ghost" style="flex: 0;" id="downloadBtn" data-local="download" href="" target="_blank">Download
+      </bx-btn>
+    </div>
+  </div>
+
+  <!-- DATA -->
+  <div id="data" class="flex-col-gap">
+    <h1 class="print-none" data-local="data">Data</h1>
+    <div id="notifications" class="print-none"></div>
+    <div id="dataTables" class="emptyWhenLoaded">
+      <bx-data-table>
+        <bx-table size="large">
+          <bx-table-head>
+            <bx-table-header-row>
+              <bx-table-header-cell-skeleton data-local="loading">Loading</bx-table-header-cell-skeleton>
+              <bx-table-header-cell-skeleton></bx-table-header-cell-skeleton>
+              <bx-table-header-cell-skeleton></bx-table-header-cell-skeleton>
+            </bx-table-header-row>
+          </bx-table-head>
+          <bx-table-body>
+            <bx-table-row>
+              <bx-table-cell-skeleton></bx-table-cell-skeleton>
+              <bx-table-cell-skeleton></bx-table-cell-skeleton>
+              <bx-table-cell-skeleton></bx-table-cell-skeleton>
+            </bx-table-row>
+            <bx-table-row>
+              <bx-table-cell></bx-table-cell>
+              <bx-table-cell></bx-table-cell>
+              <bx-table-cell></bx-table-cell>
+            </bx-table-row>
+          </bx-table-body>
+        </bx-table>
+      </bx-data-table>
+    </div>
+  </div>
+
+  <!-- MODALS -->
+  <bx-modal id="modalFilter">
+    <bx-modal-header>
+      <bx-modal-close-button></bx-modal-close-button>
+      <bx-modal-heading data-local="newFilter">New filter</bx-modal-heading>
+    </bx-modal-header>
+    <bx-modal-body>
+      <div class="modal-body flex-col-gap">
+        <div class="flex-rows">
+          <bx-dropdown value="or" data-local="conjunction" data-localattr="label-text" label-text="Conjunction"
+            style="flex: 0;min-width: 120px;" id="filterConjunction">
+            <bx-dropdown-item value="or" data-local="or">Or</bx-dropdown-item>
+            <bx-dropdown-item value="and" data-local="and">And</bx-dropdown-item>
+          </bx-dropdown>
+          <bx-combo-box class="fillWithProperties fillWithValues" data-target="filterValue" label-text="Property"
+            id="filterProperty"></bx-combo-box>
+          <bx-dropdown value="=" data-local="comparator" data-localattr="label-text" label-text="Comparator"
+            id="filterComparator">
+            <bx-dropdown-item value="=" data-local="equalsTo">Equals to</bx-dropdown-item>
+            <bx-dropdown-item value="!=" data-local="differentFrom">Different from</bx-dropdown-item>
+            <bx-dropdown-item value=">" data-local="greaterThan">Greater than</bx-dropdown-item>
+            <bx-dropdown-item value=">=" data-local="greaterThanEqual">Greater than or equal to</bx-dropdown-item>
+            <bx-dropdown-item value="<" data-local="lessThan">Less than</bx-dropdown-item>
+            <bx-dropdown-item value="<=" data-local="lessThanEqual">Less than or equal to</bx-dropdown-item>
+          </bx-dropdown>
+        </div>
+
+        <h4 data-local="value">Value</h4>
+        <p data-local="useOneOf">Use one of the following</p>
+        <div class="flex-rows">
+          <bx-combo-box label-text="Data value" data-local="dataValue" data-localattr="label-text" id="filterValue">
+          </bx-combo-box>
+          <bx-combo-box class="fillWithProperties" data-local="property" data-localattr="label-text"
+            label-text="Property" id="filterValueProperty"></bx-combo-box>
+        </div>
+        <div class="flex-rows items-end">
+          <bx-input id="filterValueCustom">
+            <span slot="label-text" data-local="customValue">Custom value</span>
+          </bx-input>
+          <bx-checkbox label-text="Use regular expression" data-local="useRegex" data-localattr="label-text"
+            id="filterUseRegex"></bx-checkbox>
+        </div>
+      </div>
+    </bx-modal-body>
+    <bx-modal-footer>
+      <bx-modal-footer-button data-action="closeModal" id="addFilterBtn" data-local="add">Add</bx-modal-footer-button>
+    </bx-modal-footer>
+  </bx-modal>
+
+  <bx-modal id="modalDivider">
+    <bx-modal-header>
+      <bx-modal-close-button></bx-modal-close-button>
+      <bx-modal-heading data-local="newDivider">New divider</bx-modal-heading>
+    </bx-modal-header>
+    <bx-modal-body>
+      <div class="modal-body flex-col-gap">
+        <div class="flex-rows small-gaps">
+          <bx-dropdown value="rows" data-local="rowsNewTable" data-localattr="label-text" label-text="Rows/New table"
+            id="dividerType">
+            <bx-dropdown-item value="rows" data-local="arbitraryNumRows">Arbitrary number of rows</bx-dropdown-item>
+            <bx-dropdown-item value="break" data-local="newTablePage">New table/Page break</bx-dropdown-item>
+          </bx-dropdown>
+          <bx-number-input value="1" min="1" id="dividerNumRows">
+            <span slot="label-text" data-local="numRows">Number of rows</span>
+          </bx-number-input>
+        </div>
+        <bx-combo-box class="fillWithProperties" data-local="property" data-localattr="label-text" label-text="Property"
+          id="dividerProperty"></bx-combo-box>
+      </div>
+    </bx-modal-body>
+    <bx-modal-footer>
+      <bx-modal-footer-button data-action="closeModal" id="addDividerBtn" data-local="add">Add</bx-modal-footer-button>
+    </bx-modal-footer>
+  </bx-modal>
+
+  <bx-modal id="modalStatistic">
+    <bx-modal-header>
+      <bx-modal-close-button></bx-modal-close-button>
+      <bx-modal-heading data-local="newStatistic">New statistic</bx-modal-heading>
+    </bx-modal-header>
+    <bx-modal-body>
+      <div class="modal-body flex-col-gap">
+        <div class="flex-rows small-gaps">
+          <bx-dropdown value="count" data-local="operator" data-localattr="label-text" label-text="Operator"
+            id="statisticOperator">
+            <bx-dropdown-item value="count" data-local="countUnique">Count unique values</bx-dropdown-item>
+            <bx-dropdown-item value="math" data-local="sumAvg">Sum and average</bx-dropdown-item>
+          </bx-dropdown>
+          <bx-combo-box class="fillWithProperties" data-local="property" data-localattr="label-text"
+            label-text="Property" id="statisticProperty"></bx-combo-box>
+        </div>
+      </div>
+    </bx-modal-body>
+    <bx-modal-footer>
+      <bx-modal-footer-button data-action="closeModal" id="addStatisticBtn" data-local="add">Add
+      </bx-modal-footer-button>
+    </bx-modal-footer>
+  </bx-modal>
+
+  <bx-modal id="modalSave">
+    <bx-modal-header>
+      <bx-modal-close-button></bx-modal-close-button>
+      <bx-modal-heading data-local="savedOptions">Save options</bx-modal-heading>
+    </bx-modal-header>
+    <bx-modal-body>
+      <div class="modal-body flex-col-gap">
+        <bx-input id="saveOptionsName">
+          <span slot="label-text" data-local="saveAs">Save as</span>
+        </bx-input>
+      </div>
+    </bx-modal-body>
+    <bx-modal-footer>
+      <bx-modal-footer-button data-action="closeModal" id="saveOptionsBtn" data-local="save">Save
+      </bx-modal-footer-button>
+    </bx-modal-footer>
+  </bx-modal>
+
+  <!-- Carbon Design Kit -->
+  <script type="module" src="https://1.www.s81c.com/common/carbon/web-components/tag/latest/accordion.min.js"></script>
+  <script type="module" src="https://1.www.s81c.com/common/carbon/web-components/tag/latest/button.min.js"></script>
+  <script type="module" src="https://1.www.s81c.com/common/carbon/web-components/tag/latest/modal.min.js"></script>
+  <script type="module" src="https://1.www.s81c.com/common/carbon/web-components/tag/latest/checkbox.min.js"></script>
+  <script type="module" src="https://1.www.s81c.com/common/carbon/web-components/tag/latest/form.min.js"></script>
+  <script type="module" src="https://1.www.s81c.com/common/carbon/web-components/tag/latest/dropdown.min.js"></script>
+  <script type="module" src="https://1.www.s81c.com/common/carbon/web-components/tag/latest/combo-box.min.js"></script>
+  <script type="module"
+    src="https://1.www.s81c.com/common/carbon/web-components/tag/latest/number-input.min.js"></script>
+  <script type="module"
+    src="https://1.www.s81c.com/common/carbon/web-components/tag/latest/skeleton-text.min.js"></script>
+  <script type="module" src="https://1.www.s81c.com/common/carbon/web-components/tag/latest/data-table.min.js"></script>
+  <script type="module" src="https://1.www.s81c.com/common/carbon/web-components/tag/latest/tag.min.js"></script>
+  <script type="module" src="https://1.www.s81c.com/common/carbon/web-components/tag/latest/tile.min.js"></script>
+  <script type="module"
+    src="https://1.www.s81c.com/common/carbon/web-components/tag/latest/notification.min.js"></script>
+
+  <!-- JQuery UI -->
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
+  <!-- Variables and constants -->
+  <script src="js/variables.js"></script>
+
+  <!-- localization -->
+  <script src="js/localization.js"></script>
+
+  <!-- Logic -->
+  <script src="js/utils.js"></script>
+  <script src="js/dom-functions.js"></script>
+  <script src="js/table-functions.js"></script>
+  <script src="js/ui-logic.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>
