@@ -19,7 +19,6 @@ const localizationStrings = {
     filtersInfo: "Add and remove filters. Conjunctions will be applied to same property filters.",
     newFilter: "New filter",
     conjunction: "Conjunction",
-    property: "Property",
     comparator: "Comparator",
     value: "Value",
     dividers: "Dividers",
@@ -37,7 +36,7 @@ const localizationStrings = {
     generateTable: "Generate",
     print: "Print",
     download: "Download",
-    data: "data",
+    data: "Data",
     loading: "Loading",
     add: "Add",
     save: "Save",
@@ -50,8 +49,6 @@ const localizationStrings = {
     lessThan: "Less than",
     lessThanEqual: "Less than or equal to",
     useOneOf: "Use one of the following",
-    conjunction: "Conjunction",
-    comparator: "Comparator",
     dataValue: "Data value",
     customValue: "Custom value",
     useRegex: "Use regular expression",
@@ -88,7 +85,6 @@ const localizationStrings = {
     filtersInfo: "Aggiungi e rimuovi filtri. Le congiunzioni saranno applicate solo ai filtri con le stesse proprietà.",
     newFilter: "Nuovo filtro",
     conjunction: "Congiunzione",
-    property: "Proprietà",
     comparator: "Comparatore",
     dividers: "Divisori",
     value: "Valore",
@@ -119,8 +115,6 @@ const localizationStrings = {
     lessThan: "Minore di",
     lessThanEqual: "Minore o uguale a",
     useOneOf: "Usa una delle seguenti opzioni",
-    conjunction: "Congiunzione",
-    comparator: "Comparatore",
     dataValue: "Valore dai dati",
     customValue: "Valore personalizzato",
     useRegex: "Usa espressioni regolari",
@@ -143,7 +137,7 @@ let loc = localizationStrings.default;
 
 const language = window.navigator.userLanguage || window.navigator.language;
 if (language) {
-  loc = localizationStrings[language] || loc;
+  loc = localizationStrings[language] || localizationStrings[language.substring(0, 2)] || loc;
 }
 
 const elementsToLocalize = document.querySelectorAll("[data-local]");
