@@ -110,7 +110,7 @@ const localizationStrings = {
     and: "E",
     equalsTo: "Uguale a",
     differentFrom: "Diverso da",
-    greaterThan: "Maggiore a",
+    greaterThan: "Maggiore di",
     greaterThanEqual: "Maggiore o uguale a",
     lessThan: "Minore di",
     lessThanEqual: "Minore o uguale a",
