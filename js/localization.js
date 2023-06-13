@@ -9,6 +9,7 @@ const localizationStrings = {
     noElements: "No elements to list",
     noProperties: "No headers selected",
     options: "Options",
+    property: "Properties",
     headers: "Headers",
     headersInfo: "Drag and drop properties you want to show in the table generated.",
     availableProperties: "Availables properties",
