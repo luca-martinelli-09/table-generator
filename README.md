@@ -6,7 +6,8 @@ Simply copy the repository where you want. In the `head` tag of `index.html`, ch
 ```json
 {
   "status": "success",
-  "data": [{...}, ...]
+  "data": [{...}, ...],
+  "keys": []
 }
 ```
 

@@ -69,6 +69,21 @@ dividerType.addEventListener("bx-dropdown-selected", function () {
   }
 });
 
+// Add void property
+
+addVoidPropertyBtn.addEventListener("click", function () {
+  const property = sv(addVoidPropertyName.value);
+  if (rawData?.keys && property && !rawData.keys.includes(property)) {
+    const tag = document.createElement("bx-tag");
+
+    tag.dataset.value = property || "";
+    tag.innerText = property || loc.empty;
+    tag.setAttribute("type", "magenta");
+
+    selectedPropertiesHeaders.appendChild(tag);
+  }
+})
+
 // Add filter
 
 addFilterBtn.addEventListener("click", function () {

@@ -15,6 +15,10 @@ const selectedPropertiesHeaders = document.getElementById("selectedPropertiesHea
 const availablePropertiesSorting = document.getElementById("availablePropertiesSorting");
 const selectedPropertiesSorting = document.getElementById("selectedPropertiesSorting");
 
+// Void properties
+addVoidPropertyBtn = document.getElementById("addVoidPropertyBtn");
+addVoidPropertyName = document.getElementById("addVoidPropertyName");
+
 
 // Filters
 const filterConjunction = document.getElementById("filterConjunction");
